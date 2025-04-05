@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: anti
+  labels:
+    type: anti
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      type: anti
+  template:
+    metadata:
+      labels:
+        type: anti
+    spec:
+      containers:
+        - name: anti-cont
+          image: nginx
+          ports:
+            - containerPort: 80
+      affinity:
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchLabels:
+                  type: anti
+              topologyKey: "kubernetes.io/hostname"
